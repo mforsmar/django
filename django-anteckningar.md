@@ -143,3 +143,14 @@ Godtyckliga keyword-argument kan skickas i dictionary till target view.
 
 ###### Url()-argument: name
 Eventuellt namn på URLen så att denna kan refereras till på ett lättare sätt. På detta vis kan globala förändringar genomföras genom att ändra i en enda fil.
+
+##### Konstruera views
+Fler Python-metoder kan defineras i polls/views.py, och _urlpatterns_ kan utökas till flera patterns i polls/urls.py med lämpliga parametrar. När någon requestar en hemsida kommer Django att ladda in mysite.urls-Pythonmodulen då den pekas på genom ROOT_URLCONF-inställningen i settings.py. Den i sin tur hittar variabeln _urlpatterns_ och går därefter igenom de olika regex:arna i ordning. include()-funktionerna refererar till andra URLconfs. När Django stöter på include() så klipper den bort den delen av URLen som den dittills gått igenom och skickar med resten av URLen till den inkluderade URLconf:en för vidare processing.
+
+Exempel på vad som händer om en användare går till en viss URL.
+- Django kommer att matcha mot '^polls/'
+- Sedan kommer Django klippa ur till den matchande texten "polls/" och skicka den resterande delen "34/" till 'olls.urls' URLconf för vidare processing. Där matchar den mot <span style="background-color:yellow">r'^(?P<question_id>\d+)/$'</span> vilket resulterar i ett anrop till detail()-funktionen i views.py:
+
+      detail(request=<HttpRequest object>, question_id='34')
+
+###### Konstruera mer funktionella views
