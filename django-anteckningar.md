@@ -154,3 +154,28 @@ Exempel på vad som händer om en användare går till en viss URL.
       detail(request=<HttpRequest object>, question_id='34')
 
 ###### Konstruera mer funktionella views
+Varje view måste utföra en av två uppgifter.
+- Return:a ett _HttpRequest_-objekt med innehållet av den efterfrågade sidan.
+Eller.
+- Upprätta ett exception, som t.ex. _Http404_.
+
+I övrigt är det upp till utvecklaren att komma på ytterligare funktionaliteter som använder vilka Python-bibliotek som helst. Exempelvis kan den:
+- Läsa från en databas.
+- Använda olika templates.
+- Generera en PDF-file.
+- Output:a XML.
+- Skapa en ZIP-fil.
+
+För att undvika hårdkodning i view:erna så kan man använda Djangos template-system för att för att separera designen från Python genom att skapa en template för view:en.
+- Skapa mappen "templates" i "polls", där letar Django efter templates.
+- Man kan ha alla templates i hela projektets template-mapp, men det blir tydligare med app-specifika templatemappar.
+- Genom att spränga in Djangos egna databas-API i en view så kan datahämtas när olika sidinteraktioner sker.
+
+###### En genväg: render()
+Då det är väldigt vanligt att ladda en template, fylla den med innehåll och returnera en _HttpRequest_-objekt med resultatet så provide:ar Django ett shortcut. Genom att istället importera och returnera render() så kan antalet importerade delar klumpas ihop. render() har nedanstående parametrar.
+- request-objektet
+- template-namnet
+- Ett dictionary (valfritt)
+På så vis returneras ett _HttpRequest_-objekt av den inpassade templaten renderad med det givna context:et.
+
+###### 404 error
